@@ -1,0 +1,562 @@
+/* =====================================================================
+   Smart Document Q&A Agent - Minimal Modern SaaS Theme Stylesheet
+   Theme: Light neutral canvas (#FAFAFA), dark slate text (#1E293B), single teal accent (#14B8A6)
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* --- Root Design Tokens (Modern SaaS Dashboard) --- */
+:root {
+  --bg-canvas: #FAFAFA;
+  --bg-sidebar: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F1F5F9;
+  
+  --text-main: #1E293B;
+  --text-muted: #64748B;
+  --text-subtle: #94A3B8;
+  
+  --accent: #14B8A6;
+  --accent-hover: #0D9488;
+  --accent-active: #0F766E;
+  --accent-light: #F0FDFA;
+  --accent-border: #CCFBF1;
+  --accent-badge-text: #0F766E;
+  
+  --border-default: #E2E8F0;
+  --border-hover: #CBD5E1;
+  --border-focus: #14B8A6;
+  
+  --shadow-flat: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  
+  --transition-fast: all 0.15s ease-in-out;
+}
+
+/* --- Universal Typography (Clean & Specific - Never override icon fonts) --- */
+html, body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scoped typography to preserve Material Symbols icon font */
+.stMarkdown, .stText, p, input, textarea, select, .stButton > button, 
+[data-testid="stWidgetLabel"], [data-testid="stMetricValue"], [data-testid="stMarkdownContainer"] {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  color: var(--text-main);
+}
+
+/* Explicitly restore and enforce Material Symbols / Streamlit Icons */
+[data-testid*="Icon"],
+[data-testid="stIconMaterial"],
+[data-testid="stExpanderToggleIcon"],
+[data-testid="stSidebarCollapseButton"],
+.material-symbols-rounded,
+.material-icons,
+[class*="material-symbols"],
+[class*="MaterialSymbols"] {
+  font-family: 'Material Symbols Rounded', 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  word-wrap: normal !important;
+  white-space: nowrap !important;
+  direction: ltr !important;
+}
+
+/* --- App Background & Main Canvas --- */
+.stApp {
+  background-color: var(--bg-canvas) !important;
+}
+
+header[data-testid="stHeader"] {
+  background: transparent !important;
+}
+
+/* --- Sidebar Styling --- */
+[data-testid="stSidebar"] {
+  background-color: var(--bg-sidebar) !important;
+  border-right: 1px solid var(--border-default) !important;
+}
+
+[data-testid="stSidebar"] > div:first-child {
+  padding-top: 0.75rem !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+[data-testid="stSidebarHeader"] {
+  padding: 0.5rem 1rem 0 1rem !important;
+  background: transparent !important;
+}
+
+[data-testid="stSidebarCollapseButton"] button {
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-sm) !important;
+  background-color: var(--bg-surface) !important;
+  color: var(--text-muted) !important;
+  transition: var(--transition-fast) !important;
+}
+
+[data-testid="stSidebarCollapseButton"] button:hover {
+  border-color: var(--accent) !important;
+  color: var(--accent-hover) !important;
+  background-color: var(--accent-light) !important;
+}
+
+[data-testid="stSidebar"] h1 {
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.75rem !important;
+  white-space: nowrap !important;
+  color: var(--text-main) !important;
+}
+
+[data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: var(--text-muted) !important;
+  margin-top: 1rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* --- Main Page Typography Hierarchy --- */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+}
+
+h2, [data-testid="stHeadingWithActionElements"] h2 {
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  color: var(--text-main) !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+h3, [data-testid="stHeadingWithActionElements"] h3 {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: var(--text-main) !important;
+}
+
+/* --- Clean Modern SaaS Hero Header Card --- */
+.hero-header-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-card);
+}
+
+.hero-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-light);
+  color: var(--accent-badge-text);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hero-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.hero-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  display: inline-block;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.25;
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.hero-subtitle {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.55;
+  margin-bottom: 0;
+}
+
+/* --- Stat Metric Cards (No Truncation) --- */
+[data-testid="stMetric"] {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 8px 10px !important;
+  box-shadow: var(--shadow-flat) !important;
+  transition: var(--transition-fast) !important;
+  overflow: visible !important;
+}
+
+[data-testid="stMetric"]:hover {
+  border-color: var(--border-hover) !important;
+}
+
+[data-testid="stMetricLabel"] {
+  color: var(--text-muted) !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.2 !important;
+}
+
+[data-testid="stMetricLabel"] > div,
+[data-testid="stMetricLabel"] p {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  font-size: 0.7rem !important;
+}
+
+[data-testid="stMetricValue"] {
+  color: var(--text-main) !important;
+  font-size: 1.45rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  margin-top: 2px !important;
+}
+
+/* --- Clean Modern Buttons --- */
+.stButton > button {
+  border-radius: var(--radius-md) !important;
+  font-weight: 500 !important;
+  font-size: 0.88rem !important;
+  padding: 0.48rem 0.95rem !important;
+  transition: var(--transition-fast) !important;
+  border: 1px solid var(--border-default) !important;
+  background-color: var(--bg-surface) !important;
+  color: var(--text-main) !important;
+  box-shadow: var(--shadow-flat) !important;
+}
+
+.stButton > button:hover {
+  border-color: var(--border-hover) !important;
+  background-color: var(--bg-sidebar) !important;
+  color: var(--accent-hover) !important;
+}
+
+.stButton > button:active {
+  background-color: var(--bg-subtle) !important;
+}
+
+/* Primary Button: Solid Teal */
+.stButton > button[kind="primary"], button[data-testid="baseButton-primary"] {
+  background-color: var(--accent) !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  border: 1px solid var(--accent-hover) !important;
+  box-shadow: var(--shadow-flat) !important;
+  font-weight: 600 !important;
+}
+
+.stButton > button[kind="primary"]:hover, button[data-testid="baseButton-primary"]:hover {
+  background-color: var(--accent-hover) !important;
+  border-color: var(--accent-active) !important;
+  color: #FFFFFF !important;
+}
+
+.stButton > button[kind="primary"]:active, button[data-testid="baseButton-primary"]:active {
+  background-color: var(--accent-active) !important;
+}
+
+.stButton > button:disabled, button[data-testid="baseButton-primary"]:disabled {
+  background-color: var(--bg-subtle) !important;
+  color: var(--text-subtle) !important;
+  border-color: var(--border-default) !important;
+  cursor: not-allowed !important;
+}
+
+/* --- Text Inputs & Textareas --- */
+.stTextInput > div > div > input, .stTextArea textarea {
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--text-main) !important;
+  padding: 0.6rem 0.85rem !important;
+  font-size: 0.92rem !important;
+  transition: var(--transition-fast) !important;
+  box-shadow: var(--shadow-flat) !important;
+}
+
+.stTextInput > div > div > input:focus, .stTextArea textarea:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.18) !important;
+  outline: none !important;
+}
+
+.stTextInput > label, .stTextArea > label {
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  color: var(--text-main) !important;
+}
+
+/* --- File Uploader --- */
+[data-testid="stFileUploader"] {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-fast);
+}
+
+[data-testid="stFileUploaderDropzone"] {
+  background-color: var(--bg-canvas) !important;
+  border: 1px dashed var(--border-hover) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 18px 16px !important;
+  transition: var(--transition-fast) !important;
+}
+
+[data-testid="stFileUploaderDropzone"]:hover {
+  border-color: var(--accent) !important;
+  background-color: var(--accent-light) !important;
+}
+
+[data-testid="stFileUploaderFile"] {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 8px 12px !important;
+  margin-top: 6px !important;
+}
+
+/* --- Radio Buttons (Segmented Modern Pill Selector) --- */
+[data-testid="stRadio"] > div {
+  background: var(--bg-subtle) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 4px !important;
+  gap: 4px !important;
+}
+
+[data-testid="stRadio"] label {
+  background: transparent !important;
+  padding: 6px 12px !important;
+  border-radius: var(--radius-sm) !important;
+  transition: var(--transition-fast) !important;
+  cursor: pointer !important;
+  margin-bottom: 0 !important;
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
+  color: var(--text-muted) !important;
+}
+
+[data-testid="stRadio"] label:hover {
+  color: var(--text-main) !important;
+}
+
+[data-testid="stRadio"] label[data-checked="true"],
+[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) {
+  background: var(--bg-surface) !important;
+  box-shadow: var(--shadow-flat) !important;
+  border: 1px solid var(--border-default) !important;
+  font-weight: 600 !important;
+  color: var(--accent-badge-text) !important;
+}
+
+/* --- Minimal Info Banner --- */
+.custom-info-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  box-shadow: var(--shadow-flat);
+  margin: 14px 0 20px 0;
+}
+
+.custom-info-icon {
+  font-size: 1.15rem;
+  color: var(--accent-hover);
+  flex-shrink: 0;
+}
+
+.custom-info-text {
+  font-size: 0.88rem;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+/* --- Answer Display Card --- */
+.answer-display-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-card);
+  margin: 16px 0 20px 0;
+}
+
+.answer-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-hover);
+  margin-bottom: 12px;
+}
+
+.answer-body {
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--text-main);
+  font-weight: 400;
+}
+
+/* --- Citation Chips / Tags --- */
+.citation-chips-wrapper {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-default);
+}
+
+.citation-chips-label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.citation-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.citation-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-light);
+  color: var(--accent-badge-text);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: var(--transition-fast);
+  cursor: default;
+}
+
+.citation-chip:hover {
+  background: #E6FFFA;
+  border-color: var(--accent);
+}
+
+.citation-chip-score {
+  background: var(--bg-surface);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  color: var(--accent-hover);
+  border: 1px solid var(--accent-border);
+  font-weight: 600;
+}
+
+/* --- Expandable Sections --- */
+[data-testid="stExpander"] {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-flat) !important;
+  margin-top: 8px !important;
+  transition: var(--transition-fast) !important;
+  overflow: hidden !important;
+}
+
+[data-testid="stExpander"]:hover {
+  border-color: var(--border-hover) !important;
+}
+
+[data-testid="stExpander"] summary {
+  color: var(--text-main) !important;
+  font-weight: 500 !important;
+  font-size: 0.88rem !important;
+  padding: 8px 12px !important;
+  cursor: pointer !important;
+}
+
+[data-testid="stExpanderToggleIcon"] {
+  color: var(--text-muted) !important;
+}
+
+/* --- Code Snippet Blocks --- */
+code, pre {
+  background-color: var(--bg-subtle) !important;
+  color: var(--text-main) !important;
+  border-radius: var(--radius-sm) !important;
+  border: 1px solid var(--border-default) !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+/* --- Clean Subtle Dividers --- */
+hr {
+  border: none !important;
+  height: 1px !important;
+  background-color: var(--border-default) !important;
+  margin: 1.25rem 0 !important;
+}
+
+/* --- Progress Bar & Spinner --- */
+.stProgress > div > div > div > div {
+  background-color: var(--accent) !important;
+}
+
+.stSpinner > div {
+  border-top-color: var(--accent) !important;
+}

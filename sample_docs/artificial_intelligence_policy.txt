@@ -1,0 +1,32 @@
+APEX UNIVERSITY - ACADEMIC INTEGRITY POLICY ON ARTIFICIAL INTELLIGENCE (2026-2027)
+
+Section 1: General Purpose and Scope
+Apex University recognizes the transformative potential of Artificial Intelligence (AI) and Generative AI technologies in teaching, learning, and research. This policy outlines acceptable and prohibited uses of AI tools by undergraduate and graduate students across all academic disciplines. The guiding principle is intellectual honesty: students must be the primary authors and thinkers behind all submitted coursework.
+
+Section 2: Permitted Uses of AI
+Students are permitted to utilize AI assistance only in the following contexts:
+1. Brainstorming and Topic Ideation: Exploring research topics, generating high-level outlines, or discovering alternative viewpoints.
+2. Grammar and Style Checking: Using automated proofreading tools (e.g., spell checkers, grammar linters) to polish sentence structure, provided the original prose was authored by the student.
+3. Code Debugging: Using AI to explain compilation errors, syntax mistakes, or algorithmic bottlenecks, provided the core logic and solution design are student-generated.
+
+Section 3: Prohibited Uses and Violations
+The following actions constitute academic misconduct and are strictly forbidden:
+1. Direct Text Generation: Submitting essays, lab reports, literature reviews, or reflection papers generated in whole or in part by AI tools without explicit instructor authorization.
+2. Exam and Assessment Cheating: Using any AI tool during in-class, take-home, or remote examinations, quizzes, or timed assessments.
+3. Fabrication of Citations: Presenting hallucinated or fabricated citations, academic papers, or datasets produced by generative models.
+4. Unauthorized Code Submission: Submitting programming assignments or scripts directly synthesized by LLMs where independent coding ability is being evaluated.
+
+Section 4: Mandatory Disclosure and Citation Protocol
+Whenever AI tools are used to assist coursework (where permitted by the course syllabus), students MUST provide a dedicated "AI Usage Disclosure" statement in their submission appendix. The statement must document:
+- The exact tool and model version used (e.g., ChatGPT GPT-4o, Claude 3.5 Sonnet, Ollama Llama 3).
+- The specific prompts supplied to the tool.
+- How the model output was incorporated, modified, or verified by the student.
+
+Section 5: Penalties for Non-Compliance
+Violations will be adjudicated by the Apex University Academic Integrity Board:
+- First Offense: Automatic grade of zero (0) on the assessment and a mandatory completion of an Academic Integrity Workshop.
+- Second Offense: Immediate failure (grade of 'F') in the course and disciplinary probation for one academic year.
+- Third Offense: Suspension or permanent expulsion from Apex University.
+
+Section 6: Appeals Process
+Students wishing to appeal an academic integrity ruling must submit a written petition to the Dean of Academic Affairs within ten (10) business days of receiving the board's formal notification.
