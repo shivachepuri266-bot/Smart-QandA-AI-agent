@@ -182,14 +182,28 @@ def render_sidebar(embedder: Any) -> Dict[str, Any]:
         st.subheader("🤖 LLM Inference Engine")
         provider = st.radio(
             "Select LLM Backend:",
-            options=["Ollama (Local / Free)", "OpenAI (API Key)"],
+            options=["LM Studio (Local / Free)", "Ollama (Local / Free)", "OpenAI (API Key)"],
             index=0,
-            help="Ollama runs 100% locally on your machine with zero API cost. OpenAI requires an API key."
+            help="LM Studio and Ollama run 100% locally on your machine with zero API cost. OpenAI requires an API key."
         )
 
-        config: Dict[str, Any] = {"provider": "ollama" if "Ollama" in provider else "openai"}
+        config: Dict[str, Any] = {}
 
-        if config["provider"] == "ollama":
+        if "LM Studio" in provider:
+            config["provider"] = "lmstudio"
+            config["model_name"] = st.text_input(
+                "LM Studio Model Name:",
+                value="local-model",
+                help="Name or alias of the model loaded in LM Studio (default: 'local-model')."
+            )
+            config["ollama_url"] = st.text_input(
+                "LM Studio Base URL:",
+                value="http://localhost:1234",
+                help="Default local endpoint for LM Studio server (port 1234)."
+            )
+            config["openai_api_key"] = None
+        elif "Ollama" in provider:
+            config["provider"] = "ollama"
             config["model_name"] = st.text_input(
                 "Ollama Model Name:",
                 value="llama3",
@@ -198,10 +212,11 @@ def render_sidebar(embedder: Any) -> Dict[str, Any]:
             config["ollama_url"] = st.text_input(
                 "Ollama Base URL:",
                 value="http://localhost:11434",
-                help="Default local endpoint for Ollama daemon."
+                help="Default local endpoint for Ollama daemon (port 11434)."
             )
             config["openai_api_key"] = None
         else:
+            config["provider"] = "openai"
             config["model_name"] = st.text_input(
                 "OpenAI Model Name:",
                 value="gpt-4o-mini",
@@ -318,13 +333,19 @@ def main():
 
             except LLMInferenceError as exc:
                 st.error(f"⚠️ {str(exc)}")
-                if llm_config["provider"] == "ollama":
+                if llm_config["provider"] == "lmstudio":
+                    st.info(
+                        "💡 **How to start LM Studio:**  \n"
+                        "1. In LM Studio, click the **`<->` (Local Server)** icon on the left panel.  \n"
+                        "2. Select your model at the top and click the green **'Start Server'** button (port 1234).  \n"
+                        "3. ⚠️ **Cloud Notice:** If viewing from Streamlit Cloud (`streamlit.app`), cloud servers cannot reach your laptop's localhost. Run the app locally on your laptop (`streamlit run app.py`) or switch to OpenAI in the sidebar."
+                    )
+                elif llm_config["provider"] == "ollama":
                     st.info(
                         "💡 **How to start Ollama:**  \n"
                         "1. Download and install Ollama from [ollama.com](https://ollama.com)  \n"
-                        "2. Open a terminal and run: `ollama pull llama3`  \n"
-                        "3. Ensure the daemon is running (`ollama serve`)  \n"
-                        "*(Or switch to OpenAI in the sidebar if you have an API key)*"
+                        "2. Open a terminal and run: `ollama run llama3` (port 11434).  \n"
+                        "3. ⚠️ **Cloud Notice:** Cloud servers cannot reach your laptop's localhost. Run locally (`streamlit run app.py`) or switch to OpenAI."
                     )
             except Exception as exc:
                 st.error(f"❌ Unexpected Error: {str(exc)}")
