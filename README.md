@@ -172,3 +172,25 @@ Streamlit will automatically open your default browser at `http://localhost:8501
 | `vector_store.py` | `FaissVectorStore` | Wraps FAISS `IndexFlatL2`; maps internal IDs to metadata and calculates exact cosine similarity. |
 | `qa_chain.py` | `build_grounded_prompt`, `answer_question`, `query_ollama`, `query_openai` | Formats context passages, builds hallucination-resistant prompts, and executes LLM queries. |
 | `app.py` | `main`, `index_files`, `render_sidebar` | Streamlit reactive web application, file uploader, chat history, and visualization. |
+
+---
+
+## Cloud Deployment Guide
+
+### Why Not Vercel?
+Vercel is designed for **Serverless Functions** (Next.js, FastAPI, Flask). When Vercel sees `app.py`, it looks for a WSGI/ASGI variable (`app = Flask(...)` or `handler`), throwing `[PYTHON_ENTRYPOINT_NOT_FOUND]`. 
+
+Furthermore, Streamlit requires **persistent WebSockets** and stateful in-memory vector stores, which are not supported by stateless serverless functions that terminate after 10–15 seconds.
+
+### Deploying for Free to Streamlit Community Cloud (Recommended)
+1. Push your repository to GitHub: `https://github.com/shivachepuri266-bot/Smart-QandA-AI-agent`
+2. Visit [share.streamlit.io](https://share.streamlit.io/) and log in with GitHub.
+3. Click **"New app"** and fill in:
+   - **Repository:** `shivachepuri266-bot/Smart-QandA-AI-agent`
+   - **Branch:** `master`
+   - **Main file path:** `app.py`
+4. In **Advanced Settings**, add secrets if using OpenAI:
+   ```toml
+   OPENAI_API_KEY = "your_openai_key"
+   ```
+5. Click **Deploy!** Your app will be live with a public URL in 2 minutes.

@@ -24,6 +24,12 @@ from embeddings import get_embedding_model
 from vector_store import FaissVectorStore
 from qa_chain import answer_question, LLMInferenceError
 
+# Expose top-level WSGI/ASGI 'app' for Vercel Serverless runtime detection
+try:
+    from api.index import app  # noqa: F401
+except Exception:
+    app = None
+
 # Load environment configuration
 load_dotenv()
 
@@ -186,13 +192,13 @@ def render_sidebar(embedder: Any) -> Dict[str, Any]:
         if config["provider"] == "ollama":
             config["model_name"] = st.text_input(
                 "Ollama Model Name:",
-                value="llama-3-groq-8b-tool-use",
-                help="Model loaded in your local LLM server (e.g. LM Studio or Ollama)."
+                value="llama3",
+                help="Make sure this model is pulled in your terminal (`ollama pull llama3` or `ollama pull mistral`)."
             )
             config["ollama_url"] = st.text_input(
                 "Ollama Base URL:",
-                value="http://localhost:1234",
-                help="Default local endpoint for LM Studio (port 1234) or Ollama (port 11434)."
+                value="http://localhost:11434",
+                help="Default local endpoint for Ollama daemon."
             )
             config["openai_api_key"] = None
         else:
@@ -314,10 +320,10 @@ def main():
                 st.error(f"⚠️ {str(exc)}")
                 if llm_config["provider"] == "ollama":
                     st.info(
-                        "💡 **How to start the local LLM server:**  \n"
-                        "1. Open **LM Studio** and load a model (e.g. `llama-3-groq-8b-tool-use`)  \n"
-                        "2. Click **Start Server** in LM Studio (runs on `http://localhost:1234`)  \n"
-                        "3. Come back here and click **Get Answer with Citations**  \n"
+                        "💡 **How to start Ollama:**  \n"
+                        "1. Download and install Ollama from [ollama.com](https://ollama.com)  \n"
+                        "2. Open a terminal and run: `ollama pull llama3`  \n"
+                        "3. Ensure the daemon is running (`ollama serve`)  \n"
                         "*(Or switch to OpenAI in the sidebar if you have an API key)*"
                     )
             except Exception as exc:
