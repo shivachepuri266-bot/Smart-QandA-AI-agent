@@ -67,23 +67,20 @@ def build_grounded_prompt(question: str, context: str) -> str:
     Returns:
         The complete prompt string ready for LLM consumption.
     """
-    prompt = f"""You are an accurate, reliable, and honest Document Question Answering assistant.
-Your task is to answer the user's question using ONLY the factual information in the context excerpts below.
+    prompt = f"""You are a helpful Document Q&A assistant. Answer the user's question based on the context excerpts provided below.
 
-Strict Operational Guidelines:
-1. Base your answer EXCLUSIVELY on the provided context excerpts. Do not speculate, extrapolate, or utilize outside knowledge.
-2. Whenever you provide a fact or statement, cite the source filename and page number from the context headers (for example: [Source: artificial_intelligence_policy.txt, Page 1]).
-3. If the answer CANNOT be deduced from the provided context, respond EXACTLY with:
-   "I don't have enough information in the provided documents."
-4. Never invent or hallucinate facts or citations.
+Instructions:
+1. Use the information from the context excerpts to give a clear, detailed answer.
+2. Cite sources using the format [Source: filename, Page X] when referencing specific information.
+3. If the context doesn't contain relevant information, say: "I don't have enough information in the provided documents."
+4. Be thorough and explain concepts clearly.
 
 Context Excerpts:
 ---------------------
 {context}
 ---------------------
 
-User Question:
-{question}
+Question: {question}
 
 Answer:"""
     return prompt
@@ -121,14 +118,15 @@ def query_ollama(
             {
                 "role": "system",
                 "content": (
-                    "You are a precise document Q&A assistant. "
-                    "Answer only using the supplied context and never fabricate citations."
+                    "You are a helpful and knowledgeable document Q&A assistant. "
+                    "Read the provided context carefully and give detailed, clear answers. "
+                    "Always cite your sources."
                 )
             },
             {"role": "user", "content": prompt}
         ],
-        "temperature": 0.1,
-        "max_tokens": 512
+        "temperature": 0.3,
+        "max_tokens": 1024
     }
 
     try:
@@ -196,12 +194,12 @@ def query_openai(
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a precise document Q&A assistant that answers only using supplied context and never fabricates citations."
+                    "content": "You are a helpful and knowledgeable document Q&A assistant. Read the provided context carefully and give detailed, clear answers. Always cite your sources."
                 },
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.1,
-            max_tokens=600
+            temperature=0.3,
+            max_tokens=1024
         )
 
         content = response.choices[0].message.content
