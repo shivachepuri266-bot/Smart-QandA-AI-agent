@@ -91,7 +91,7 @@ Answer:"""
 
 def query_openrouter(
     prompt: str,
-    model: str = "meta-llama/llama-3.3-70b-instruct:free",
+    model: str = "openrouter/free",
     api_key: Optional[str] = None,
     timeout: int = 90
 ) -> str:
@@ -168,7 +168,8 @@ def query_openrouter(
 
         choices = data.get("choices", [])
         if choices:
-            content = choices[0].get("message", {}).get("content", "")
+            msg = choices[0].get("message", {})
+            content = msg.get("content") or msg.get("reasoning") or ""
             return content.strip()
         return ""
 
@@ -195,7 +196,7 @@ def answer_question(
     question: str,
     vector_store: Any,
     embedder: Any,
-    model_name: str = "meta-llama/llama-3.3-70b-instruct:free",
+    model_name: str = "openrouter/free",
     openrouter_api_key: Optional[str] = None,
     top_k: int = 5,
     **kwargs: Any

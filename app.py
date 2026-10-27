@@ -183,12 +183,12 @@ def render_sidebar(embedder: Any) -> Dict[str, Any]:
         st.caption("Using **OpenRouter** free models (zero local GPU needed)")
 
         free_models = [
-            "meta-llama/llama-3.3-70b-instruct:free",
-            "google/gemini-2.0-flash-exp:free",
-            "meta-llama/llama-3.1-8b-instruct:free",
-            "qwen/qwen-2.5-7b-instruct:free",
-            "mistralai/mistral-7b-instruct:free",
-            "deepseek/deepseek-r1:free",
+            "openrouter/free",
+            "google/gemma-4-31b-it:free",
+            "google/gemma-4-26b-a4b-it:free",
+            "nvidia/nemotron-3.5-lightning:free",
+            "nvidia/nemotron-3.5-super-vl:free",
+            "liquid/lfm-2.5-2.6b:free",
             "Custom Model ID..."
         ]
 
@@ -196,13 +196,13 @@ def render_sidebar(embedder: Any) -> Dict[str, Any]:
             "Select Free Model:",
             options=free_models,
             index=0,
-            help="Free models hosted on OpenRouter. No credit card or usage fee required."
+            help="Choose 'openrouter/free' to auto-route to the best free model, or pick a specific free model."
         )
 
         if selected_model == "Custom Model ID...":
             model_name = st.text_input(
                 "Custom OpenRouter Model ID:",
-                value="meta-llama/llama-3.3-70b-instruct:free",
+                value="openrouter/free",
                 help="Type any valid model ID from openrouter.ai/models"
             )
         else:
