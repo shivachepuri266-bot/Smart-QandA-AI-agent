@@ -111,7 +111,15 @@ def query_openrouter(
         LLMInferenceError: If the API key is missing, invalid, or OpenRouter returns an error.
     """
     key = api_key or os.getenv("OPENROUTER_API_KEY")
-    if not key or not key.strip():
+    if not key:
+        try:
+            import streamlit as st
+            if hasattr(st, "secrets") and "OPENROUTER_API_KEY" in st.secrets:
+                key = str(st.secrets["OPENROUTER_API_KEY"])
+        except Exception:
+            pass
+
+    if not key or not str(key).strip():
         raise LLMInferenceError(
             "OpenRouter API Key is missing. Please enter your API key in the sidebar "
             "or set OPENROUTER_API_KEY in your .env file. (Get a free key at https://openrouter.ai/keys)"

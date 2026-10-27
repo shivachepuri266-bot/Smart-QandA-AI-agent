@@ -209,12 +209,19 @@ def render_sidebar(embedder: Any) -> Dict[str, Any]:
             model_name = selected_model
 
         env_key = os.getenv("OPENROUTER_API_KEY", "")
+        if not env_key:
+            try:
+                if hasattr(st, "secrets") and "OPENROUTER_API_KEY" in st.secrets:
+                    env_key = str(st.secrets["OPENROUTER_API_KEY"])
+            except Exception:
+                pass
+
         openrouter_api_key = st.text_input(
             "OpenRouter API Key:",
             value=env_key,
             type="password",
             placeholder="sk-or-v1-...",
-            help="Reads automatically from OPENROUTER_API_KEY in .env if set. Get a free key at openrouter.ai/keys."
+            help="Reads from .env or Streamlit Cloud Secrets. Get a free key at openrouter.ai/keys."
         )
 
         if not openrouter_api_key:
