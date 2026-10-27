@@ -6,7 +6,7 @@ This is the main entry point for the RAG system. It coordinates:
 - In-memory parsing, recursive chunking, and embedding generation
 - FAISS vector store indexing and persistence in session state
 - Interactive natural language Q&A with grounded citations
-- Configurable LLM inference backends (Ollama local / OpenAI API)
+- Cloud LLM inference backend powered exclusively by OpenRouter (Free Tier Models)
 - "Minimal Modern SaaS" visual theme with teal accent
 """
 
@@ -178,61 +178,55 @@ def render_sidebar(embedder: Any) -> Dict[str, Any]:
 
         st.divider()
 
-        # Section 2: LLM Provider Configuration
-        st.subheader("🤖 LLM Inference Engine")
-        provider = st.radio(
-            "Select LLM Backend:",
-            options=["Ollama (Local / Free)", "LM Studio (Local / Free)", "OpenAI (API Key)"],
+        # Section 2: LLM Configuration (OpenRouter Only)
+        st.subheader("🌐 OpenRouter LLM")
+        st.caption("Using **OpenRouter** free models (zero local GPU needed)")
+
+        free_models = [
+            "meta-llama/llama-3.3-70b-instruct:free",
+            "google/gemini-2.0-flash-exp:free",
+            "meta-llama/llama-3.1-8b-instruct:free",
+            "qwen/qwen-2.5-7b-instruct:free",
+            "mistralai/mistral-7b-instruct:free",
+            "deepseek/deepseek-r1:free",
+            "Custom Model ID..."
+        ]
+
+        selected_model = st.selectbox(
+            "Select Free Model:",
+            options=free_models,
             index=0,
-            help="LM Studio and Ollama run 100% locally on your machine with zero API cost. OpenAI requires an API key."
+            help="Free models hosted on OpenRouter. No credit card or usage fee required."
         )
 
-        config: Dict[str, Any] = {}
-
-        if "LM Studio" in provider:
-            config["provider"] = "lmstudio"
-            config["model_name"] = st.text_input(
-                "LM Studio Model Name:",
-                value="local-model",
-                help="Name or alias of the model loaded in LM Studio (default: 'local-model')."
+        if selected_model == "Custom Model ID...":
+            model_name = st.text_input(
+                "Custom OpenRouter Model ID:",
+                value="meta-llama/llama-3.3-70b-instruct:free",
+                help="Type any valid model ID from openrouter.ai/models"
             )
-            config["ollama_url"] = st.text_input(
-                "LM Studio Base URL:",
-                value="http://localhost:1234",
-                help="Default local endpoint for LM Studio server (port 1234)."
-            )
-            config["openai_api_key"] = None
-        elif "Ollama" in provider:
-            config["provider"] = "ollama"
-            config["model_name"] = st.text_input(
-                "Ollama Model Name:",
-                value="llama3",
-                help="Make sure this model is pulled in your terminal (`ollama pull llama3` or `ollama pull mistral`)."
-            )
-            config["ollama_url"] = st.text_input(
-                "Ollama Base URL:",
-                value="http://localhost:11434",
-                help="Default local endpoint for Ollama daemon (port 11434)."
-            )
-            config["openai_api_key"] = None
         else:
-            config["provider"] = "openai"
-            config["model_name"] = st.text_input(
-                "OpenAI Model Name:",
-                value="gpt-4o-mini",
-                help="E.g. gpt-4o-mini, gpt-4o, or gpt-3.5-turbo"
-            )
-            env_key = os.getenv("OPENAI_API_KEY", "")
-            config["openai_api_key"] = st.text_input(
-                "OpenAI API Key:",
-                value=env_key,
-                type="password",
-                help="Reads automatically from .env if present."
-            )
-            config["ollama_url"] = None
+            model_name = selected_model
+
+        env_key = os.getenv("OPENROUTER_API_KEY", "")
+        openrouter_api_key = st.text_input(
+            "OpenRouter API Key:",
+            value=env_key,
+            type="password",
+            placeholder="sk-or-v1-...",
+            help="Reads automatically from OPENROUTER_API_KEY in .env if set. Get a free key at openrouter.ai/keys."
+        )
+
+        if not openrouter_api_key:
+            st.info("🔑 **Enter your OpenRouter API key above** to start asking questions. Get a free key at [openrouter.ai/keys](https://openrouter.ai/keys).")
+
+        config: Dict[str, Any] = {
+            "model_name": model_name,
+            "openrouter_api_key": openrouter_api_key
+        }
 
         st.divider()
-        st.caption("🎓 **Smart Document Q&A Agent**  \nCS Academic Project Review Edition  \nPython 3.11 • FAISS • MiniLM-L6-v2")
+        st.caption("🎓 **Smart Document Q&A Agent**  \nCS Academic Project Review Edition  \nOpenRouter • FAISS • MiniLM-L6-v2")
 
         return config
 
@@ -311,16 +305,14 @@ def main():
     ask_button = st.button("🔍 Get Answer with Citations", type="primary", disabled=(stats["total_chunks"] == 0 or not user_question.strip()))
 
     if ask_button and user_question.strip():
-        with st.spinner("Retrieving relevant passages and querying LLM..."):
+        with st.spinner(f"Retrieving relevant passages and querying {llm_config['model_name']}..."):
             try:
                 result = answer_question(
                     question=user_question.strip(),
                     vector_store=st.session_state.vector_store,
                     embedder=embedder,
-                    provider=llm_config["provider"],
                     model_name=llm_config["model_name"],
-                    openai_api_key=llm_config["openai_api_key"],
-                    ollama_url=llm_config.get("ollama_url", "http://localhost:11434"),
+                    openrouter_api_key=llm_config["openrouter_api_key"],
                     top_k=5
                 )
 
@@ -333,19 +325,12 @@ def main():
 
             except LLMInferenceError as exc:
                 st.error(f"⚠️ {str(exc)}")
-                if llm_config["provider"] == "lmstudio":
+                if not llm_config["openrouter_api_key"]:
                     st.info(
-                        "💡 **How to start LM Studio:**  \n"
-                        "1. In LM Studio, click the **`<->` (Local Server)** icon on the left panel.  \n"
-                        "2. Select your model at the top and click the green **'Start Server'** button (port 1234).  \n"
-                        "3. ⚠️ **Cloud Notice:** If viewing from Streamlit Cloud (`streamlit.app`), cloud servers cannot reach your laptop's localhost. Run the app locally on your laptop (`streamlit run app.py`) or switch to OpenAI in the sidebar."
-                    )
-                elif llm_config["provider"] == "ollama":
-                    st.info(
-                        "💡 **How to start Ollama:**  \n"
-                        "1. Download and install Ollama from [ollama.com](https://ollama.com)  \n"
-                        "2. Open a terminal and run: `ollama run llama3` (port 11434).  \n"
-                        "3. ⚠️ **Cloud Notice:** Cloud servers cannot reach your laptop's localhost. Run locally (`streamlit run app.py`) or switch to OpenAI."
+                        "💡 **How to get your OpenRouter API Key (Free):**  \n"
+                        "1. Go to [openrouter.ai/keys](https://openrouter.ai/keys) and sign in.  \n"
+                        "2. Click **Create Key** (it is free, no credit card required).  \n"
+                        "3. Paste the key into the **OpenRouter API Key** field in the left sidebar."
                     )
             except Exception as exc:
                 st.error(f"❌ Unexpected Error: {str(exc)}")

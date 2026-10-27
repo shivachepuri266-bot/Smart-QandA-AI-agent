@@ -51,7 +51,7 @@ processed_files = set()
 class QuestionRequest(BaseModel):
     question: str
     api_key: Optional[str] = None
-    model_name: Optional[str] = "gpt-4o-mini"
+    model_name: Optional[str] = "meta-llama/llama-3.3-70b-instruct:free"
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -424,11 +424,11 @@ def serve_ui():
       </div>
 
       <div class="sidebar-card">
-        <div class="sidebar-heading">🤖 Cloud LLM Configuration</div>
+        <div class="sidebar-heading">🌐 OpenRouter LLM</div>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
-          Deployed on Vercel Serverless. Enter your OpenAI API key below (or set OPENAI_API_KEY in Vercel environment variables).
+          Using OpenRouter free models. Enter your OpenRouter API key below (or set OPENROUTER_API_KEY in environment variables).
         </p>
-        <input type="password" id="sidebarApiKey" placeholder="sk-proj-..." />
+        <input type="password" id="sidebarApiKey" placeholder="sk-or-v1-..." />
       </div>
 
       <div style="font-size: 0.78rem; color: var(--text-muted); text-align: center; margin-top: 20px;">
@@ -683,11 +683,11 @@ def query_qa(payload: QuestionRequest):
             "sources": []
         }
 
-    api_key = payload.api_key or os.getenv("OPENAI_API_KEY")
+    api_key = payload.api_key or os.getenv("OPENROUTER_API_KEY")
     if not api_key:
         raise HTTPException(
             status_code=400,
-            detail="OpenAI API Key is required for Vercel Cloud inference. Enter your key in the sidebar."
+            detail="OpenRouter API Key is required. Enter your key in the sidebar (openrouter.ai/keys)."
         )
 
     try:
@@ -695,9 +695,8 @@ def query_qa(payload: QuestionRequest):
             question=q,
             vector_store=vector_store,
             embedder=embedder,
-            provider="openai",
-            model_name=payload.model_name or "gpt-4o-mini",
-            openai_api_key=api_key,
+            model_name=payload.model_name or "meta-llama/llama-3.3-70b-instruct:free",
+            openrouter_api_key=api_key,
             top_k=5
         )
         return result

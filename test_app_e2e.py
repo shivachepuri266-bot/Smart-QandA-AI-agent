@@ -79,10 +79,10 @@ def test_streamlit_app_flow():
     print("  -> Clicking 'Get Answer with Citations' button...")
     ask_btn.click().run()
 
-    # Verify app handles Ollama connection gracefully (either succeeds or displays user-friendly error)
+    # Verify app handles OpenRouter API key missing gracefully (either succeeds or displays user-friendly error)
     assert not at.exception, f"App raised unhandled exception during Q&A: {at.exception}"
     if at.error:
-        print(f"  -> Graceful user-friendly error caught as expected when Ollama is offline: {at.error[0].value[:100]}...")
+        print(f"  -> Graceful user-friendly error caught as expected when API key is unset: {at.error[0].value[:100]}...")
     else:
         print("  -> Q&A response rendered successfully!")
 
@@ -93,9 +93,9 @@ def test_streamlit_answer_and_citations_rendering():
     print("\nTesting Streamlit Q&A UI rendering with simulated LLM response...")
     import qa_chain
 
-    # Mock Ollama response
-    original_query = qa_chain.query_ollama
-    qa_chain.query_ollama = lambda prompt, model, base_url, timeout=90: (
+    # Mock OpenRouter response
+    original_query = qa_chain.query_openrouter
+    qa_chain.query_openrouter = lambda prompt, model="meta-llama/llama-3.3-70b-instruct:free", api_key=None, timeout=90: (
         "Undergraduate students may borrow up to 25 items concurrently for a 21-day loan period "
         "[Source: campus_library_guide.txt, Page 1]."
     )
@@ -132,6 +132,7 @@ def test_streamlit_answer_and_citations_rendering():
         print("  -> Citation and Answer UI Rendering Verified!")
 
     finally:
+        qa_chain.query_openrouter = original_query
         qa_chain.query_ollama = original_query
 
 
