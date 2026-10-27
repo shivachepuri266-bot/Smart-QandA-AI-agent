@@ -182,7 +182,7 @@ def render_sidebar(embedder: Any) -> Dict[str, Any]:
         st.subheader("🤖 LLM Inference Engine")
         provider = st.radio(
             "Select LLM Backend:",
-            options=["LM Studio (Local / Free)", "Ollama (Local / Free)", "OpenAI (API Key)"],
+            options=["Ollama (Local / Free)", "LM Studio (Local / Free)", "OpenAI (API Key)"],
             index=0,
             help="LM Studio and Ollama run 100% locally on your machine with zero API cost. OpenAI requires an API key."
         )
